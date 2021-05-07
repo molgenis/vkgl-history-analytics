@@ -83,12 +83,12 @@ public class VKGLHistoryAnalytics {
                     {
                         v.oneLabRawClassification = s[i];
                         v.oneLabLPPLBBmergedClassification = s[i].contains("athogenic") ? "(Likely) pathogenic" : s[i].contains("enign") ? "(Likely) benign" : s[i].contains("VUS") ? "VUS" : null;
-                        v.consensus_classification_withOneLab = "Classified by one lab as "+v.oneLabLPPLBBmergedClassification;
+                        v.consensus_classification_withOneLab = "One lab: "+v.oneLabLPPLBBmergedClassification;
                     }
                 }
             }
             else{
-                v.consensus_classification_withOneLab = v.consensus_classification;
+                v.consensus_classification_withOneLab = "Multiple labs: " + v.consensus_classification;
             }
             consBins.add(v.consensus_classification_withOneLab);
 
@@ -159,7 +159,7 @@ public class VKGLHistoryAnalytics {
             missingIds.removeAll(uIdsInRelease);
             for(String mID : missingIds)
             {
-                bw.write(release.replace("\"", "") + "\t" + "Absent" + "\t" + mID.replace("\"", "") + "\n");
+                bw.write(release.replace("\"", "") + "\t" + "Absent from release" + "\t" + mID.replace("\"", "") + "\n");
             }
 
         }
