@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * genes not always properly capitalized
  * cDNA not always properly capitalized
  * variants not always merged properly (e.g. same gene/cDNA, but different positions)
+ * bad cDNA notation i.e. "C.907G>C, NM_001083602.1"
  *
  */
 public class VKGLHistoryAnalytics {
@@ -55,6 +56,15 @@ public class VKGLHistoryAnalytics {
 
             // assign uniqueID
             if(!v.gene.isEmpty() && !v.c_dna.isEmpty()){
+                // bad notation i.e. "C.907G>C, NM_001083602.1"
+                if(v.c_dna.contains(", "))
+                {
+                    String[] splitFix = v.c_dna.split(", ");
+                    if(splitFix.length == 2)
+                    {
+                        v.c_dna = splitFix[0] + "\""; //remove later, keep consistent with old notation for now
+                    }
+                }
                 v.uniqueId = v.gene + "_" + v.c_dna;
             }
             else if(!v.gene.isEmpty() && !v.protein.isEmpty()){
