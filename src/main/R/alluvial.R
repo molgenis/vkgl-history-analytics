@@ -3,7 +3,7 @@ require(ggalluvial)
 require(RColorBrewer)
 
 setwd("/Users/joeri/github/vkgl-history-analytics/artifacts/")
-vch <- read.table("vkgl_consensus_history_df.tsv",header=TRUE,sep='\t',quote="",comment.char="")
+vch <- read.table("vkgl_consensus_history_df_v2.tsv",header=TRUE,sep='\t',quote="",comment.char="")
 #is_lodes_form(vch, key = "Release", value = "Consensus", id = "Id")
 
 vch$Release <- factor(vch$Release,levels = c("May 2018", "October 2018", "June 2019", "October 2019", "December 2019", "March 2020", "June 2020", "September 2020", "January 2021"))
@@ -33,7 +33,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.position = "bottom") +
   labs(x = "Release date of variant classification database", y = "Number of variants") +
   ggtitle("VKGL national diagnostics variant database: what happened to variants with opposite classifications in one or more releases?")
-ggsave("vkgl_opposite_history.png", width = 11, height = 6)
+ggsave("vkgl_opposite_history_v2.png", width = 11, height = 6)
 
 ## special: variants can be followed
 ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +
@@ -45,4 +45,4 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.position = "bottom") +
   labs(x = "Release date of variant classification database", y = "Number of variants") +
   ggtitle("VKGL national diagnostics variant database: what happened to variants with opposite classifications in one or more releases?")
-ggsave("vkgl_opposite_history_pervar.png", width = 11, height = 6)
+ggsave("vkgl_opposite_history_pervar_v2.png", width = 11, height = 6)
