@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * cDNA not always properly capitalized
  * variants not always merged properly (e.g. same gene/cDNA, but different positions)
  * bad cDNA notation i.e. "C.907G>C, NM_001083602.1"
+ * missing notations, i.e. variant has cDNA, VCF, protein in one release, only VCF and protein in another
+ *
  *
  */
 public class VKGLHistoryAnalytics {
@@ -195,26 +197,6 @@ public class VKGLHistoryAnalytics {
         for(id variantId : variantIds)
         {
 
-            // gentle: only add missing values
-//            if(variantId.Protid == null && variantId.cDNAid != null && cdnaToProtein.containsKey(variantId.cDNAid)){
-//                variantId.Protid = cdnaToProtein.get(variantId.cDNAid);
-//            }
-//            if(variantId.Protid == null &&  variantId.VCFid != null && vcfToProtein.containsKey(variantId.VCFid)){
-//                variantId.Protid = vcfToProtein.get(variantId.VCFid);
-//            }
-//            if(variantId.cDNAid == null && variantId.Protid != null && proteinToCdna.containsKey(variantId.Protid)){
-//            variantId.cDNAid = proteinToCdna.get(variantId.Protid);
-//        }
-//            if(variantId.cDNAid == null &&  variantId.VCFid != null && vcfToCdna.containsKey(variantId.VCFid)){
-//                variantId.cDNAid = vcfToCdna.get(variantId.VCFid);
-//            }
-//            if(variantId.VCFid == null && variantId.Protid != null && proteinToVCF.containsKey(variantId.Protid)){
-//                variantId.VCFid = proteinToVCF.get(variantId.Protid);
-//            }
-//            if(variantId.VCFid == null &&  variantId.cDNAid != null && cdnaToVCF.containsKey(variantId.cDNAid)){
-//                variantId.VCFid = cdnaToVCF.get(variantId.cDNAid);
-//            }
-
             // aggressive: overwrite everything
             if(variantId.cDNAid != null && cdnaToProtein.containsKey(variantId.cDNAid)){
                 variantId.Protid = cdnaToProtein.get(variantId.cDNAid);
@@ -291,16 +273,16 @@ public class VKGLHistoryAnalytics {
                 }
 
 
-                bw.write(release + "\t" + v.consensus_classification_withOneLab + "\t" + v.id.toString() + "\n"); //v.id.replace("\"", "")
+                bw.write(release + "\t" + v.consensus_classification_withOneLab + "\t" + v.id.toString() + "\n");
                 uIdsInRelease.add(v.id);
             }
 
             // fill up variant list with 'Missing', if not seen for this release
-            HashSet<id> missingIds = new HashSet<id>(variantsThatAreOnceOpposite); //FIXME: use variantIds for full set
+            HashSet<id> missingIds = new HashSet<id>(variantsThatAreOnceOpposite);
             missingIds.removeAll(uIdsInRelease);
             for(id mID : missingIds)
             {
-                bw.write(release + "\t" + "Absent from release" + "\t" + mID.toString() + "\n"); //mID.replace("\"", "")
+                bw.write(release + "\t" + "Absent from release" + "\t" + mID.toString() + "\n");
             }
 
         }
