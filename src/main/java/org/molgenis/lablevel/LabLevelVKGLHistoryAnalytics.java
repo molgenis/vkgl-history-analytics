@@ -1,4 +1,6 @@
-package org.molgenis;
+package org.molgenis.lablevel;
+
+import org.molgenis.id;
 
 import java.io.*;
 import java.util.*;
@@ -16,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  *
  */
-public class VKGLHistoryAnalytics {
+public class LabLevelVKGLHistoryAnalytics {
 
     private File vkglHistory;
     private File outputDataFrame;
@@ -26,7 +28,7 @@ public class VKGLHistoryAnalytics {
     private Set<String> releases;
 
     // variants and helper lists with pointers to IDs
-    private Map<String, List<Variant>> allVariants;
+    private Map<String, List<LabLevelVariant>> allVariants;
     private List<id> variantIds;
     private List<id> variantsThatAreOnceOpposite;
 
@@ -39,13 +41,13 @@ public class VKGLHistoryAnalytics {
     private Map<String, String> proteinToCdna;
 
 
-    public VKGLHistoryAnalytics(File vkglHistory, File outputDataFrame){
+    public LabLevelVKGLHistoryAnalytics(File vkglHistory, File outputDataFrame){
         this.vkglHistory = vkglHistory;
         this.outputDataFrame = outputDataFrame;
         this.consBins = new HashSet<>();
         this.releases = new LinkedHashSet<>();
         this.variantIds = new ArrayList<id>();
-        this.allVariants = new HashMap<String, List<Variant>>();
+        this.allVariants = new HashMap<String, List<LabLevelVariant>>();
         this.variantsThatAreOnceOpposite = new ArrayList<>();
         this.cdnaToVCF = new HashMap<String, String>();
         this.cdnaToProtein = new HashMap<String, String>();
@@ -71,7 +73,7 @@ public class VKGLHistoryAnalytics {
             String line = sc.nextLine().replace("\"", "");;
             String[] s = line.split("\t", -1);
 
-            Variant v = new Variant(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7].toUpperCase(), s[8].toUpperCase(), s[9], s[10], s[11], s[12], s[13], s[14], s[15], s[16], s[17], s[18], s[19], s[20], s[21]);
+            LabLevelVariant v = new LabLevelVariant(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7].toUpperCase(), s[8].toUpperCase(), s[9], s[10], s[11], s[12], s[13], s[14], s[15], s[16], s[17], s[18], s[19], s[20], s[21]);
 
             // assign uniqueID
             String cDNAid = null;
@@ -158,7 +160,7 @@ public class VKGLHistoryAnalytics {
             // add variant to its release
             if(!allVariants.containsKey(s[1]))
             {
-                allVariants.put(v.export, new ArrayList<Variant>());
+                allVariants.put(v.export, new ArrayList<LabLevelVariant>());
             }
             allVariants.get(v.export).add(v);
 
@@ -250,9 +252,9 @@ public class VKGLHistoryAnalytics {
             HashSet<id> uIdsInRelease = new HashSet<>();
 
             System.out.println("Working on release " + release);
-            List<Variant> vr = allVariants.get(release);
+            List<LabLevelVariant> vr = allVariants.get(release);
 
-            for(Variant v : vr)
+            for(LabLevelVariant v : vr)
             {
 
                 if(!variantsThatAreOnceOpposite.contains(v.id))
