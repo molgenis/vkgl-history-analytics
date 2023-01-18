@@ -113,7 +113,7 @@ public class MergeDataSets {
 
                 String[] lineSplit = line.split((isCSV?",":"\t"), -1);
 
-                String releaseName = f.getName().substring(0, f.getName().indexOf("."));
+                String releaseName = f.getName().substring(0, f.getName().indexOf(".")).replace("VKGL_public_consensus_", "");
                 StringBuilder sb = new StringBuilder();
                 // check if split length is as expected
                 if(headerType == 1 && lineSplit.length==13)
@@ -121,11 +121,30 @@ public class MergeDataSets {
                     sb.append(releaseName);
                     for(int i = 0; i < 13; i++)
                     {
-                        sb.append("\t" + lineSplit[i]);
+
+                        if(i == 11)
+                        {
+                            String classification =  lineSplit[i];
+                            if(classification.equalsIgnoreCase("(Likely) Pathogenic")){
+                                classification = "LP";
+                            }
+                            else if(classification.equalsIgnoreCase("(Likely) benign")){
+                                classification = "LB";
+                            }
+                            if(!classification.equals("LP") && !classification.equals("LB") && !classification.equals("VUS"))
+                            {
+                                throw new Exception("classification unknown: " + classification);
+                            }
+                            sb.append("\t" + classification);
+
+                        }else{
+                            sb.append("\t" + lineSplit[i]);
+                        }
+
+                        // extra space to match common format
                         if(i == 8){
                             sb.append("\t");
                         }
-
                     }
                     bw.write(sb + System.lineSeparator());
                 }
@@ -141,10 +160,7 @@ public class MergeDataSets {
                 else{
                     throw new Exception("problem with the data: " + line + " has " + lineSplit.length + " values");
                 }
-
             }
-
-
         }
 
         bw.flush();
