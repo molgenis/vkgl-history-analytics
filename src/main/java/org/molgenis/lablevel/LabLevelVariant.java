@@ -1,7 +1,5 @@
 package org.molgenis.lablevel;
 
-import org.molgenis.id;
-
 public class LabLevelVariant {
 
     public String dbid;
@@ -29,7 +27,7 @@ public class LabLevelVariant {
     public String oneLabRawClassification;
     public String oneLabLPPLBBmergedClassification;
     public String consensus_classification_withOneLab;
-    public org.molgenis.id id;
+    public org.molgenis.lablevel.id id;
 
     public LabLevelVariant(String id, String export, String chromosome, String start, String stop, String ref, String alt, String gene, String c_dna, String transcript, String protein, String amc, String umcg, String lumc, String vumc, String radboud_mumc, String umcu, String nki, String erasmus, String consensus_classification, String matches, String comments) {
         this.dbid = id;

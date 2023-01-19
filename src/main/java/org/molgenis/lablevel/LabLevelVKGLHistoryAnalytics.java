@@ -1,7 +1,5 @@
 package org.molgenis.lablevel;
 
-import org.molgenis.id;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -241,7 +239,6 @@ public class LabLevelVKGLHistoryAnalytics {
 
         FileWriter fw = new FileWriter(outputDataFrame);
         BufferedWriter bw = new BufferedWriter(fw);
-
 
         HashMap<String, AtomicInteger> droppedPerRelease = new HashMap<>();
 

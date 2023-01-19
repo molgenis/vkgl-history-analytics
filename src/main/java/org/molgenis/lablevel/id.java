@@ -1,7 +1,6 @@
-package org.molgenis;
+package org.molgenis.lablevel;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class id {
     public String cDNAid;
