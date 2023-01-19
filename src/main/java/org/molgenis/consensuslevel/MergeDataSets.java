@@ -122,7 +122,22 @@ public class MergeDataSets {
                     for(int i = 0; i < 13; i++)
                     {
 
-                        if(i == 11)
+                        //cleaning: replace 'MT' by 'M' and '08' by '8'
+                        if(i==2)
+                        {
+                            String chrom =  lineSplit[i];
+                            if(chrom.equals("MT"))
+                            {
+                                chrom = "M";
+                            }else if(chrom.equals("08"))
+                            {
+                                chrom = "8";
+                            }
+                            sb.append("\t" + chrom);
+                        }
+
+                        // cleaning: replace some terms with LP / LB
+                        else if(i == 11)
                         {
                             String classification =  lineSplit[i];
                             if(classification.equalsIgnoreCase("(Likely) Pathogenic")){
@@ -153,7 +168,19 @@ public class MergeDataSets {
                     sb.append(releaseName);
                     for(int i = 0; i < 14; i++)
                     {
-                        sb.append("\t" + lineSplit[i]);
+                        //cleaning: replace 'MT' by 'M'
+                        if(i==2)
+                        {
+                            String chrom =  lineSplit[i];
+                            if(chrom.equals("MT"))
+                            {
+                                chrom = "M";
+                            }
+                            sb.append("\t" + chrom);
+                        }
+                        else{
+                            sb.append("\t" + lineSplit[i]);
+                        }
                     }
                     bw.write(sb + System.lineSeparator());
                 }
