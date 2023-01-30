@@ -1,5 +1,6 @@
 package org.molgenis.consensuslevel;
 
+import org.molgenis.genepanels.SAID;
 import org.molgenis.lablevel.id;
 import org.molgenis.lablevel.LabLevelVariant;
 
@@ -46,6 +47,9 @@ public class ConsensusLevelVKGLHistoryAnalytics {
         // keep track of all unique releases while reading file
         HashSet<String> allReleases = new HashSet<>();
 
+        // keep track of all unique genes while reading file
+        HashSet<String> allGenes = new HashSet<>();
+
         /**
          * Read file and perform quick merge based on variant database ID (dbid)
          */
@@ -61,17 +65,24 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 
             ConsensusLevelVariant clv = new ConsensusLevelVariant(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[13], s[14]);
             allReleases.add(clv.release);
+            allGenes.add(clv.gene);
+
+            //DEBUG
+//            if(!clv.chromosome.equals("1"))
+//            {
+//                continue;
+//            }
 
             if(!quickMerge.containsKey(clv.chromosome))
             {
-                quickMerge.put(clv.chromosome, new HashMap<>());
+                quickMerge.put(clv.chromosome, new HashMap<String, ConsensusLevelVariant>());
             }
             HashMap<String, ConsensusLevelVariant> variantsOnChrom = quickMerge.get(clv.chromosome);
 
             if(variantsOnChrom.containsKey(clv.dbid)){
                 if(variantsOnChrom.get(clv.dbid).releaseClassification.containsKey(clv.release))
                 {
-                    System.out.println("WARNING: release already present in hashmap for " + clv);
+                    System.out.println("QUICK MERGE - WARNING: release already present in hashmap for " + clv);
                 }
                 variantsOnChrom.get(clv.dbid).releaseClassification.put(clv.release, clv.classification);
             }
@@ -91,6 +102,22 @@ public class ConsensusLevelVKGLHistoryAnalytics {
             System.out.println("chrom "+key+" variants: " + quickMerge.get(key).size());
         }
 
+        /**
+         * Post process: add release of variant that were starting points for merging to their release-classification map
+         */
+        for(String chrom : quickMerge.keySet())
+        {
+            for(String variantId : quickMerge.get(chrom).keySet())
+            {
+                ConsensusLevelVariant clv = quickMerge.get(chrom).get(variantId);
+                if(clv.releaseClassification.containsKey(clv.release))
+                {
+                    System.out.println("POST PROCESS - WARNING: release already present in hashmap for " + clv);
+                }
+                clv.releaseClassification.put(clv.release, clv.classification);
+            }
+        }
+
 
         /**
          * Deep merge based on other variant properties
@@ -98,35 +125,47 @@ public class ConsensusLevelVKGLHistoryAnalytics {
         HashMap<String, ArrayList<ConsensusLevelVariant>> deepMerge = new HashMap<>();
         for(String chrom : quickMerge.keySet())
         {
-            //DEBUG
-//            if(!chrom.equals("22") && !chrom.equals("21") && !chrom.equals("20") && !chrom.equals("19") && !chrom.equals("18"))
-//            {
-//                continue;
-//            }
             System.out.println("deep merge variants on chrom " + chrom);
             HashMap<String, ConsensusLevelVariant> variantsOnChrom =  quickMerge.get(chrom);
             if(!deepMerge.containsKey(chrom))
             {
-                deepMerge.put(chrom, new ArrayList<>());
+                deepMerge.put(chrom, new ArrayList<ConsensusLevelVariant>());
             }
             ArrayList<ConsensusLevelVariant> deepMergeOnChrom = deepMerge.get(chrom);
             for(String key : variantsOnChrom.keySet()){
                 ConsensusLevelVariant clv = variantsOnChrom.get(key);
                 ConsensusLevelVariant alreadyPresent = containsConsensusLevelVariant(deepMergeOnChrom, clv);
+
                 if(alreadyPresent == null)
                 {
                     deepMergeOnChrom.add(clv);
                 }
                 else
                 {
-                    if(alreadyPresent.releaseClassification.containsKey(clv.release))
+                    for(String releaseInNewCLV : clv.releaseClassification.keySet())
                     {
-                        //System.out.println("WARNING: release already present for\n" + alreadyPresent + "\n" + clv+"\n");
+                        if(alreadyPresent.releaseClassification.containsKey(releaseInNewCLV))
+                        {
+                            //System.out.println("DEEP MERGE - WARNING release already present for\n" + alreadyPresent + "\n" + clv+"\n");
+                            String classificationInAlreadyPresent = alreadyPresent.releaseClassification.get(releaseInNewCLV);
+                            String classificationInNewCLV = clv.releaseClassification.get(releaseInNewCLV);
+
+                            if(classificationInAlreadyPresent.equals("CF"))
+                            {
+                                System.out.println("DEEP MERGE - WARNING - Classification already marked as conflicting for\n" + alreadyPresent + "\n" + clv+"\n");
+                            }
+                            else if(!classificationInAlreadyPresent.equals(classificationInNewCLV)){
+                                System.out.println("DEEP MERGE - WARNING - Classification difference. Setting to CF for\n" + alreadyPresent + "\n" + clv+"\n");
+                                alreadyPresent.releaseClassification.put(releaseInNewCLV, "CF");
+                            }else{
+                                //System.out.println("DEEP MERGE - WARNING - Classification is the same, ignoring.");
+                            }
+                        }
+                        else{
+                            alreadyPresent.releaseClassification.put(releaseInNewCLV, clv.releaseClassification.get(releaseInNewCLV));
+                        }
                     }
-                    alreadyPresent.releaseClassification.put(clv.release, clv.classification);
                 }
-
-
             }
             System.out.println("merged from " + variantsOnChrom.size() + " to "+deepMergeOnChrom.size()+" variants");
         }
@@ -136,37 +175,41 @@ public class ConsensusLevelVKGLHistoryAnalytics {
          * Select interesting variants, e.g. those with differences in classifications over releases
          */
         ArrayList<ConsensusLevelVariant> interestingVariants = new ArrayList<>();
-        for(String chrom : quickMerge.keySet()) {
+        Set<String> interestingVariantsGenes = new HashSet<>();
+        for(String chrom : deepMerge.keySet()) {
             System.out.println("check interesting variants on chrom " + chrom);
-            HashMap<String, ConsensusLevelVariant> variantsOnChrom = quickMerge.get(chrom);
-            for (String key : variantsOnChrom.keySet()) {
-                ConsensusLevelVariant clv = variantsOnChrom.get(key);
+            ArrayList<ConsensusLevelVariant> variantsOnChrom = deepMerge.get(chrom);
+            for (ConsensusLevelVariant clv : variantsOnChrom) {
                 HashSet<String> differentialClassifications = new HashSet<>();
                 for(String release : clv.releaseClassification.keySet()){
                     differentialClassifications.add(clv.releaseClassification.get(release));
                 }
-                if(differentialClassifications.contains("LP") && differentialClassifications.contains("LB"))
+                if(
+                /**
+                 * Filter by gene, gene panel, classifications, releases, etc.
+                 */
+                        true
+                       // SAID.genes.contains(clv.gene)
+                       // && differentialClassifications.size() > 1
+                       // && differentialClassifications.contains("LB")
+                       // && differentialClassifications.contains("VUS")
+                       // && differentialClassifications.contains("LP")
+                       // && clv.releaseClassification.containsKey("sep2022")
+                )
                 {
                     interestingVariants.add(clv);
+                    interestingVariantsGenes.add(clv.gene);
                 }
             }
         }
-        System.out.println("interestingVariants = " + interestingVariants.size());
-
-        /**
-         * Post process: add release of variant that were starting points for merging to the release-classification map
-         */
-        for(ConsensusLevelVariant clv : interestingVariants)
-        {
-            clv.releaseClassification.put(clv.release, clv.classification);
-        }
+        System.out.println("filtered variant list size = " + interestingVariants.size());
 
         /**
          * Output results
          */
         FileWriter fw = new FileWriter(outputDataFrame);
         BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("Release\tConsensus\tId"+System.lineSeparator());
+        bw.write("Release\tConsensus\tId\tLabel\tGene"+System.lineSeparator());
         for(String release : allReleases)
         {
             System.out.println(release);
@@ -174,10 +217,10 @@ public class ConsensusLevelVKGLHistoryAnalytics {
             {
                 if(clv.releaseClassification.containsKey(release))
                 {
-                    bw.write(release + "\t" + clv.releaseClassification.get(release) + "\t" + clv.dbid + System.lineSeparator());
+                    bw.write(release + "\t" + clv.releaseClassification.get(release) + "\t" + clv.dbid + "\t" + makeLabel(clv) + "\t" + clv.gene + System.lineSeparator());
                 }
                 else{
-                    bw.write(release + "\t" + "Not present" + "\t" + clv.dbid + System.lineSeparator());
+                    bw.write(release + "\t" + "Absent" + "\t" + clv.dbid + "\t" + makeLabel(clv) + "\t" + clv.gene + System.lineSeparator());
                 }
             }
             bw.flush();
@@ -185,6 +228,19 @@ public class ConsensusLevelVKGLHistoryAnalytics {
         bw.flush();
         bw.close();
 
+    }
+
+    private List<String> grabRandomGenes(HashSet<String> allGenes, int size) {
+        // get random genes, but without repitions
+        List<String> allGenesArr = new ArrayList<>(allGenes);
+        Collections.shuffle(allGenesArr);
+        return allGenesArr.subList(0, size);
+    }
+
+    private String makeLabel(ConsensusLevelVariant clv) {
+        String label = clv.gene;
+        label = label + (clv.c_dna == null ? " "+clv.start+":"+clv.ref+">"+clv.alt : ":"+clv.c_dna);
+        return label;
     }
 
     private ConsensusLevelVariant containsConsensusLevelVariant(ArrayList<ConsensusLevelVariant> consensusLevelVariants, ConsensusLevelVariant clvToFind)
@@ -197,6 +253,33 @@ public class ConsensusLevelVKGLHistoryAnalytics {
             }
         }
         return null;
+    }
+
+    private void permute(HashSet allGenes, ArrayList interestingVariantsGenes, HashMap<String, ArrayList<ConsensusLevelVariant>> deepMerge, int nrOfPermutations)
+    {
+        /**
+         * Permutation for panel analysis
+         */
+        for(int i=0; i<nrOfPermutations; i++)
+        {
+            ArrayList<ConsensusLevelVariant> permutations = new ArrayList<>();
+            List<String> randomGenes = grabRandomGenes(allGenes, interestingVariantsGenes.size());
+            for(String chrom : deepMerge.keySet()) {
+                ArrayList<ConsensusLevelVariant> variantsOnChrom = deepMerge.get(chrom);
+                for (ConsensusLevelVariant clv : variantsOnChrom) {
+                    HashSet<String> differentialClassifications = new HashSet<>();
+                    for (String release : clv.releaseClassification.keySet()) {
+                        differentialClassifications.add(clv.releaseClassification.get(release));
+                    }
+                    if ( randomGenes.contains(clv.gene)
+                        // && differentialClassifications.size() > 1
+                    ) {
+                        permutations.add(clv);
+                    }
+                }
+            }
+            System.out.println("perm["+i+"] = " + permutations.size());
+        }
     }
 
 }
