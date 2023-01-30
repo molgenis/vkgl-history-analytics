@@ -61,8 +61,8 @@ public class ConsensusLevelVariant {
             this.c_dna = c_dna;
         }
         // must start with p. and length at least 4 (e.g. "p.R9Q" or "p.C9=" is okay, but "p.=" is not)
-        // extra filter for protein notations like "p.(=)" and "p.(=)  NM_001143773.1"
-        if(protein.startsWith("p.") && protein.length() > 4 && !protein.contains("(=)"))
+        // extra filter for protein notations like "p.(=)", "p.(=)  NM_001143773.1", "xx:p.?"
+        if(protein.startsWith("p.") && protein.length() > 4 && !protein.contains("(=)") && !protein.contains("p.?"))
         {
             this.protein = protein;
         }
