@@ -33,7 +33,7 @@ public class MergeDataSets {
             }
 
             //ignore
-            if(f.getName().equals(".DS_Store"))
+            if(f.isDirectory() || f.getName().equals(".DS_Store") || f.getName().equals(".Rhistory"))
             {
                 continue;
             }
