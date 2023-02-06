@@ -239,7 +239,7 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 
     private String makeLabel(ConsensusLevelVariant clv) {
         String label = clv.gene;
-        label = label + (clv.c_dna == null ? " "+clv.start+":"+clv.ref+">"+clv.alt : ":"+clv.c_dna);
+        label = label + (clv.c_dna == null ? " "+clv.start+":"+clv.ref+">"+clv.alt : ":"+((clv.c_dna.contains(" ") ? clv.c_dna.substring(0, clv.c_dna.indexOf(" ")) : clv.c_dna)));
         return label;
     }
 
