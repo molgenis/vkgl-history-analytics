@@ -10,7 +10,8 @@ import java.io.FileWriter;
 import java.util.*;
 
 /**
- * new
+ * Uses the merged VKGL public release data
+ * and outputs a dataframe for alluvial plots in R
  */
 public class ConsensusLevelVKGLHistoryAnalytics {
 
@@ -66,12 +67,6 @@ public class ConsensusLevelVKGLHistoryAnalytics {
             ConsensusLevelVariant clv = new ConsensusLevelVariant(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[13], s[14]);
             allReleases.add(clv.release);
             allGenes.add(clv.gene);
-
-            //DEBUG
-//            if(!clv.chromosome.equals("1"))
-//            {
-//                continue;
-//            }
 
             if(!quickMerge.containsKey(clv.chromosome))
             {
@@ -146,7 +141,6 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                     {
                         if(alreadyPresent.releaseClassification.containsKey(releaseInNewCLV))
                         {
-                            //System.out.println("DEEP MERGE - WARNING release already present for\n" + alreadyPresent + "\n" + clv+"\n");
                             String classificationInAlreadyPresent = alreadyPresent.releaseClassification.get(releaseInNewCLV);
                             String classificationInNewCLV = clv.releaseClassification.get(releaseInNewCLV);
 
@@ -231,7 +225,7 @@ public class ConsensusLevelVKGLHistoryAnalytics {
     }
 
     private List<String> grabRandomGenes(HashSet<String> allGenes, int size) {
-        // get random genes, but without repitions
+        // get random genes, but without repetitions
         List<String> allGenesArr = new ArrayList<>(allGenes);
         Collections.shuffle(allGenesArr);
         return allGenesArr.subList(0, size);

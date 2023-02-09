@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Merges all VKGL variant classifications public releases into 1 file
+ * Releases downloadable at https://vkgl.molgeniscloud.org/menu/main/background
+ */
 public class MergeDataSets {
 
     public static void main(String args[]) throws Exception {
@@ -96,21 +100,15 @@ public class MergeDataSets {
                         StringBuilder sb = new StringBuilder();
                         sb.append(line, 0, matcher.start());
                         String fixMe = line.substring(matcher.start(), matcher.end());
-                       // System.out.println("FIXME: " + fixMe);
                         fixMe = fixMe.replace(","," ");
                         sb.append(fixMe);
                         sb.append(line.substring(matcher.end()));
                         line = sb.toString();
                     }
-                    //System.out.println("REGEXED, LINE IS NOW : " + line);
                 }
 
                 // now remove all quotation and split on comma or tab
                 line = line.replace("\"", "");
-
-              //  System.out.println("REPLACE QUOTES, LINE IS NOW");
-              //  System.out.println(line);
-
                 String[] lineSplit = line.split((isCSV?",":"\t"), -1);
 
                 String releaseName = f.getName().substring(0, f.getName().indexOf(".")).replace("VKGL_public_consensus_", "");
