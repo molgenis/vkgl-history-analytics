@@ -183,12 +183,24 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                  * Filter by gene, gene panel, classifications, releases, etc.
                  */
                         true
-                       // SAID.genes.contains(clv.gene)
+                       // Examples:
+                       // && SAID.genes.contains(clv.gene)
                        // && differentialClassifications.size() > 1
                        // && differentialClassifications.contains("LB")
                        // && differentialClassifications.contains("VUS")
                        // && differentialClassifications.contains("LP")
-                       // && clv.releaseClassification.containsKey("sep2022")
+
+                       // "Classification history of all variants in the VKGL April 2023 public consensus release"
+                       // && clv.releaseClassification.containsKey("apr2023")
+
+                       // "History of variants in the VKGL April 2023 public consensus release with >1 different lifetime classifications"
+                       // && clv.releaseClassification.containsKey("apr2023")
+                       // && differentialClassifications.size() > 1
+
+                       // "History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
+                       && clv.releaseClassification.containsKey("apr2023")
+                       && differentialClassifications.contains("LB")
+                       && differentialClassifications.contains("LP")
                 )
                 {
                     interestingVariants.add(clv);
