@@ -33,8 +33,9 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 
 ggtitle("History of variants that have appeared in the VKGL public consensus that are not part of the April 2023 release")
 ggsave("vkgl-notinapr2023.png", width = 11, height = 6)
-  
-  
+
+---  
+
 ## special: variants can be followed
 #geom_text(stat = "alluvium", discern = FALSE, size = 2, aes(label = after_stat(alluvium))) +
 ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +
@@ -51,3 +52,18 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 
 ggtitle("History of Y-chromosome variants that have appeared in any VKGL public consensus release")
 ggsave("vkgl-apr2023-y.png", width = 11, height = 6)
+
+---
+
+## same as above but different size/scaling to allow for more data
+ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +
+  scale_fill_manual(values = palette) +
+  geom_stratum(colour=NA) +
+  geom_flow(stat = "alluvium", linewidth=0.1) +
+  geom_text(stat = "alluvium", aes(label = Label), size = 0.8) +
+  theme_bw() +
+  theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
+  theme(legend.position = "bottom") +
+  labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
+ggtitle("History of variants in the VKGL April 2023 public consensus release without a consensus classification")
+ggsave("vkgl-apr2023-nocons.png", width = 11, height = 8)
