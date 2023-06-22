@@ -65,6 +65,12 @@ public class ConsensusLevelVKGLHistoryAnalytics {
             String[] s = line.split("\t", -1);
 
             ConsensusLevelVariant clv = new ConsensusLevelVariant(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[13], s[14]);
+
+            // "History of Y-chromosome variants that have appeared in any VKGL public consensus release"
+//            if(!clv.chromosome.equals("Y")){
+//                continue;
+//            }
+
             allReleases.add(clv.release);
             allGenes.add(clv.gene);
 

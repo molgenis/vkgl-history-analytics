@@ -31,7 +31,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 #ggtitle("History of variants in the VKGL April 2023 public consensus release with >1 different lifetime classifications")
 #ggsave("vkgl-apr2023-gt1clsf.png", width = 11, height = 6)
 
-ggtitle("History of variants that have appeared in the VKGL public consensus but that are not part of the April 2023 release")
+ggtitle("History of variants that have appeared in the VKGL public consensus that are not part of the April 2023 release")
 ggsave("vkgl-notinapr2023.png", width = 11, height = 6)
   
   
@@ -46,6 +46,8 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
-  ggtitle("History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition")
-ggsave("vkgl-apr2023-lp-lb-trans.png", width = 11, height = 6)
+#ggtitle("History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition")
+#ggsave("vkgl-apr2023-lp-lb-trans.png", width = 11, height = 6)
 
+ggtitle("History of Y-chromosome variants that have appeared in any VKGL public consensus release")
+ggsave("vkgl-y.png", width = 11, height = 6)
