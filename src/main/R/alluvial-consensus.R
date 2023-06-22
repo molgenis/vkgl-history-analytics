@@ -27,9 +27,14 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   labs(x = "Release date of variant classification database", y = "Number of variants") +
 #ggtitle("Classification history of all variants in the VKGL April 2023 public consensus release")
 #ggsave("vkgl-apr2023.png", width = 11, height = 6)
-ggtitle("History of variants in the VKGL April 2023 public consensus release with >1 different lifetime classifications")
-ggsave("vkgl-apr2023-gt1clsf.png", width = 11, height = 6)
 
+#ggtitle("History of variants in the VKGL April 2023 public consensus release with >1 different lifetime classifications")
+#ggsave("vkgl-apr2023-gt1clsf.png", width = 11, height = 6)
+
+ggtitle("History of variants that have appeared in the VKGL public consensus but that are not part of the April 2023 release")
+ggsave("vkgl-notinapr2023.png", width = 11, height = 6)
+  
+  
 ## special: variants can be followed
 #geom_text(stat = "alluvium", discern = FALSE, size = 2, aes(label = after_stat(alluvium))) +
 ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +

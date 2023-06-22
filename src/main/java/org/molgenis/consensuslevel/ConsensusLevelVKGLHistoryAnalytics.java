@@ -198,9 +198,13 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                        // && differentialClassifications.size() > 1
 
                        // "History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
-                       && clv.releaseClassification.containsKey("apr2023")
-                       && differentialClassifications.contains("LB")
-                       && differentialClassifications.contains("LP")
+                       // && clv.releaseClassification.containsKey("apr2023")
+                       // && differentialClassifications.contains("LB")
+                       // && differentialClassifications.contains("LP")
+
+                        // "History of variants that have appeared in the VKGL public consensus that are not part of the April 2023 release"
+                       && !clv.releaseClassification.containsKey("apr2023")
+
                 )
                 {
                     interestingVariants.add(clv);
