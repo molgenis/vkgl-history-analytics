@@ -50,4 +50,4 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 #ggsave("vkgl-apr2023-lp-lb-trans.png", width = 11, height = 6)
 
 ggtitle("History of Y-chromosome variants that have appeared in any VKGL public consensus release")
-ggsave("vkgl-y.png", width = 11, height = 6)
+ggsave("vkgl-apr2023-y.png", width = 11, height = 6)
