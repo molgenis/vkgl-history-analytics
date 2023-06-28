@@ -23,6 +23,9 @@ public class ConsensusLevelVariant {
     public String gene;
     public String classification;
     public String support;
+    public boolean isInDel;
+    public boolean isInsertion;
+    public boolean isDeletion;
 
     // filled in later
     public HashMap<String, String> releaseClassification;
@@ -55,6 +58,24 @@ public class ConsensusLevelVariant {
             throw new Exception("alt cannot be null or empty");
         }
         this.alt = alt;
+
+        // set insertion/deletion/indel flag
+        this.isInsertion = false;
+        if((ref.equals(".") && !alt.equals(".")) || alt.length() > ref.length())
+        {
+            this.isInsertion = true;
+        }
+        this.isDeletion = false;
+        if((alt.equals(".") && !ref.equals(".")) || alt.length() < ref.length())
+        {
+            this.isDeletion = true;
+        }
+        this.isInDel = false;
+        if(this.isInsertion || this.isDeletion)
+        {
+            this.isInDel = true;
+        }
+
         // must start with c. and length at least (e.g. "c.1A>G" is okay, but "c.*73" is not)
         if(c_dna.startsWith("c.") && c_dna.length() > 5)
         {
