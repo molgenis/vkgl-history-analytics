@@ -73,9 +73,12 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 //            if(!clv.chromosome.equals("Y")){
 //                continue;
 //            }
-//            if(!clv.isDeletion){
-//                continue;
-//            }
+            if(!clv.gene.equals("BRCA1")){
+                continue;
+            }
+            if(!clv.isInsertion){
+                continue;
+            }
             /****/
 
             allReleases.add(clv.release);

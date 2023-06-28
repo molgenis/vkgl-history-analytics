@@ -50,8 +50,11 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 #ggtitle("History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition")
 #ggsave("vkgl-apr2023-lp-lb-trans.png", width = 11, height = 6)
 
-ggtitle("History of Y-chromosome variants that have appeared in any VKGL public consensus release")
-ggsave("vkgl-apr2023-y.png", width = 11, height = 6)
+#ggtitle("History of Y-chromosome variants that have appeared in any VKGL public consensus release")
+#ggsave("vkgl-apr2023-y.png", width = 11, height = 6)
+
+ggtitle("History of BRCA1 insertion variants in the VKGL April 2023 public consensus release")
+ggsave("vkgl-apr2023-brca1-ins.png", width = 11, height = 6)
 
 ---
 
