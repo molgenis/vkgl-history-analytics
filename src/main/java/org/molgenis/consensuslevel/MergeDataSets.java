@@ -24,7 +24,7 @@ public class MergeDataSets {
         String OUTPUT_FILE_HEADER = "Release\tID\tlabel\tchromosome\tstart\tstop\tref\talt\tc_notation\tp_notation\ttranscript\thgvs\tgene\tclassification\tsupport";
 
         // directory with all (and only) VKGL releases, e.g. VKGL_public_consensus_sep2022.tsv
-        File dir = new File("/Users/joeri/VKGL-releases");
+        File dir = new File("/Users/joeri/VKGL/VKGL-releases");
 
         //output
         FileWriter fw = new FileWriter(new File(dir, OUTPUT_FILE_NAME));
