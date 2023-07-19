@@ -15,9 +15,10 @@ import java.util.*;
  */
 public class ConsensusLevelVKGLHistoryAnalytics {
 
+    private static final String CURRENT_RELEASE = "july2023";
+
     private File vkglHistory;
     private File outputDataFrame;
-
 
     public ConsensusLevelVKGLHistoryAnalytics(File vkglHistory, File outputDataFrame){
         this.vkglHistory = vkglHistory;
@@ -73,12 +74,13 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 //            if(!clv.chromosome.equals("Y")){
 //                continue;
 //            }
-            if(!clv.gene.equals("BRCA1")){
-                continue;
-            }
-            if(!clv.isInsertion){
-                continue;
-            }
+            // "History of BRCA1 insertion variants in the VKGL July 2023 public consensus release"
+//            if(!clv.gene.equals("BRCA1")){
+//                continue;
+//            }
+//            if(!clv.isInsertion){
+//                continue;
+//            }
             /****/
 
             allReleases.add(clv.release);
@@ -199,31 +201,32 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                  * Filter by gene, gene panel, classifications, releases, etc.
                  */
                         true
-                       // Examples:
+
+                       // "Classification history of all variants in the VKGL July 2023 public consensus release"
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
+
+                       // "History of variants in the VKGL July 2023 public consensus release with >1 different lifetime classifications"
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
+                       // && differentialClassifications.size() > 1
+
+                       // "History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
+                       // && differentialClassifications.contains("LB")
+                       // && differentialClassifications.contains("LP")
+
+                       // "History of variants that have appeared in the VKGL public consensus that are not part of the July 2023 release"
+                       // && !clv.releaseClassification.containsKey(CURRENT_RELEASE)
+
+                       // "History of variants in the VKGL July 2023 public consensus release with conflicting classifications"
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
+                       // && clv.releaseClassification.get(CURRENT_RELEASE).equals("CF")
+
+                       // Other examples:
                        // && SAID.genes.contains(clv.gene)
                        // && differentialClassifications.size() > 1
                        // && differentialClassifications.contains("LB")
                        // && differentialClassifications.contains("VUS")
                        // && differentialClassifications.contains("LP")
-
-                       // "Classification history of all variants in the VKGL April 2023 public consensus release"
-                       // && clv.releaseClassification.containsKey("apr2023")
-
-                       // "History of variants in the VKGL April 2023 public consensus release with >1 different lifetime classifications"
-                       // && clv.releaseClassification.containsKey("apr2023")
-                       // && differentialClassifications.size() > 1
-
-                       // "History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
-                       // && clv.releaseClassification.containsKey("apr2023")
-                       // && differentialClassifications.contains("LB")
-                       // && differentialClassifications.contains("LP")
-
-                       // "History of variants that have appeared in the VKGL public consensus that are not part of the April 2023 release"
-                       // && !clv.releaseClassification.containsKey("apr2023")
-
-                       // "History of variants in the VKGL April 2023 public consensus release without a consensus classification"
-                          && clv.releaseClassification.containsKey("apr2023")
-                          && clv.releaseClassification.get("apr2023").equals("CF")
 
                 )
                 {
