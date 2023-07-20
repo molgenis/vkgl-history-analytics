@@ -68,5 +68,9 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
-ggtitle("History of variants in the VKGL July 2023 public consensus release with conflicting classifications")
-ggsave("vkgl-july2023-conflicts.png", width = 11, height = 8)
+#ggtitle("History of variants in the VKGL July 2023 public consensus release with conflicting classifications")
+#ggsave("vkgl-july2023-conflicts.png", width = 11, height = 8)
+
+#ggtitle("History of SAID gene panel indel variants in the VKGL July 2023 public consensus release")
+#ggsave("vkgl-july2023-said-indels.png", width = 11, height = 8)
+

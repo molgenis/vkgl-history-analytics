@@ -81,6 +81,13 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 //            if(!clv.isInsertion){
 //                continue;
 //            }
+            // "History of SAID gene panel indel variants in the VKGL July 2023 public consensus release"
+//            if(!SAID.genes.contains(clv.gene)){
+//                continue;
+//            }
+//            if(!clv.isInDel){
+//                continue;
+//            }
             /****/
 
             allReleases.add(clv.release);
