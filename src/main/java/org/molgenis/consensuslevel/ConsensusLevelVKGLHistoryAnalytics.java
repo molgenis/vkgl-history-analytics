@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class ConsensusLevelVKGLHistoryAnalytics {
 
-    private static final String CURRENT_RELEASE = "july2023";
+    private static final String CURRENT_RELEASE = "oct2023";
 
     private File vkglHistory;
     private File outputDataFrame;
@@ -209,22 +209,22 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                  */
                         true
 
-                       // "Classification history of all variants in the VKGL July 2023 public consensus release"
+                       // "Classification history of all variants in the VKGL [month] [year] public consensus release"
                        // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
 
-                       // "History of variants in the VKGL July 2023 public consensus release with >1 different lifetime classifications"
+                       // "History of variants in the VKGL [month] [year] public consensus release with >1 different lifetime classifications"
                        // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
                        // && differentialClassifications.size() > 1
 
-                       // "History of variants in the VKGL April 2023 public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
+                       // "History of variants in the VKGL [month] [year] public consensus release with any lifetime LP-to-LB or LB-to-LP transition"
                        // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
                        // && differentialClassifications.contains("LB")
                        // && differentialClassifications.contains("LP")
 
-                       // "History of variants that have appeared in the VKGL public consensus that are not part of the July 2023 release"
+                       // "History of variants that have appeared in the VKGL public consensus that are not part of the [month] [year] release"
                        // && !clv.releaseClassification.containsKey(CURRENT_RELEASE)
 
-                       // "History of variants in the VKGL July 2023 public consensus release with conflicting classifications"
+                       // "History of variants in the VKGL [month] [year] public consensus release with conflicting classifications"
                        // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
                        // && clv.releaseClassification.get(CURRENT_RELEASE).equals("CF")
 
