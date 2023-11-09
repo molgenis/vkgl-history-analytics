@@ -24,7 +24,7 @@ palette <- c( "VUS" = "#8DA0CB",
 ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +
   scale_fill_manual(values = palette) +
   geom_flow() +
-  geom_stratum() +
+  geom_stratum(colour=NA) +
   theme_bw() +
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
@@ -78,3 +78,17 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 #ggtitle(paste("History of SAID gene panel indel variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,"-said-indels.png", sep=""), width = 11, height = 8)
 
+# Proportion of variants in a specific release
+rel <- subset(vch, Release == "Oct 2023")
+table(rel$Consensus)
+
+# Quantify and print number of changes between releases
+for(start in 1:(length(levels(vch$Release))-1))
+{
+  first <- levels(vch$Release)[start]
+  second <- levels(vch$Release)[start+1]
+  firstIDs <- vch[vch$Release == first,]$Consensus
+  secondIDs <- vch[vch$Release == second,]$Consensus
+  changes <- length(firstIDs) - sum(firstIDs == secondIDs)
+  cat(paste("from",first,"to",second,"there are",changes,"changes\n",sep=" "))
+}
