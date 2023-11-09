@@ -87,8 +87,17 @@ public class ConsensusLevelVariant {
         {
             this.protein = protein;
         }
-        this.transcript = transcript;
-        this.hgvs = hgvs;
+        // transcript NM numbers should be at least 9 characters (e.g. NM_012188)
+        if(transcript != null && !transcript.isEmpty() && transcript.length() >= 9)
+        {
+            this.transcript = transcript;
+        }
+
+        // shortest real HGVS is perhaps 18 characters long, e.g. "NC_012920.1:m.1A>G"
+        if(hgvs != null && !hgvs.isEmpty() && hgvs.length() >= 18)
+        {
+            this.hgvs = hgvs;
+        }
         if(gene == null || gene.isEmpty())
         {
             throw new Exception("gene cannot be null or empty");
@@ -104,7 +113,7 @@ public class ConsensusLevelVariant {
         // to
         // oct2019	ba7a0e69a6	17:78157798 CARD14 AAGG>A	17	78157798	78157801	AAGG	A			NM_024110.4	NC_000017.10:g.78157802_78157804delAGG	CARD14	LP	1 lab
         // where start=78157802 matches coordinate in NC_000017.10:g.78157802
-        if(!this.hgvs.isEmpty())
+        if(this.hgvs != null)
         {
             Pattern p = Pattern.compile(":g.(.+?)\\D"); //start from g. until a non-digit
             Matcher matcher = p.matcher(this.hgvs);
@@ -114,9 +123,6 @@ public class ConsensusLevelVariant {
         // prepare "dot notations" for deep ref/alt matching
         if(ref.length() > 1 || alt.length() > 1)
         {
-            // if different lentght and does NOT contain a dot, turn into dot notation
-            // todo
-
             /*
             case: match
             C	CA  (start 18077386)
@@ -147,7 +153,7 @@ public class ConsensusLevelVariant {
                 this.startDotNotationForIndel = this.start+1;
                 this.hasDotNotation = true;
             }
-            else
+            else if(ref.length() > 1 && alt.length() > 1)
             {
                 // indels where multiple bases are replaced with multiple bases, e.g.  ref='CTT', alt='AATAAGG'
                 // must also deal with this: CA_CAA can be C_CA etc. so, must shorten notation.
@@ -159,6 +165,11 @@ public class ConsensusLevelVariant {
                     this.startDotNotationForIndel = this.start;
                     this.hasDotNotation = true;
                 }
+            }
+            else {
+                // all the existing 'dot notation' variants
+                // you can check this by adding 'if(alt.equals(".") || ref.equals("."))'
+                // an IDE will tell you this is always true ;-)
             }
         }
 
@@ -190,8 +201,9 @@ public class ConsensusLevelVariant {
         boolean startNotationMatch = StartNotationMatch(this, clv);
 
         // field comparison
-        return     ( this.gene.equals(clv.gene) && this.c_dna != null && this.c_dna.equals(clv.c_dna) )
-                || ( this.gene.equals(clv.gene) && this.protein != null && this.protein.equals(clv.protein) )
+        // match by transcript + cDNA, HGVS notation or by a combination of position, ref, and alt
+        return     ( this.transcript != null && this.c_dna != null && this.transcript.equals(clv.transcript) && this.c_dna.equals(clv.c_dna))
+                || ( this.hgvs != null && this.hgvs.equals(clv.hgvs) )
                 || ( startNotationMatch && this.ref.equals(clv.ref) && this.alt.equals(clv.alt))
                 || ( this.hasDotNotation && startNotationMatch && this.refDotNotationForIndel.equals(clv.ref) && this.altDotNotationForIndel.equals(clv.alt))
                 || ( clv.hasDotNotation && startNotationMatch && clv.refDotNotationForIndel.equals(this.ref) && clv.altDotNotationForIndel.equals(this.alt))
