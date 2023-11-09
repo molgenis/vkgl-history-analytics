@@ -74,14 +74,14 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 //            if(!clv.chromosome.equals("Y")){
 //                continue;
 //            }
-            // "History of BRCA1 insertion variants in the VKGL July 2023 public consensus release"
+            // "History of BRCA1 insertion variants in the VKGL [month] [year] public consensus release"
 //            if(!clv.gene.equals("BRCA1")){
 //                continue;
 //            }
 //            if(!clv.isInsertion){
 //                continue;
 //            }
-            // "History of SAID gene panel indel variants in the VKGL July 2023 public consensus release"
+            // "History of SAID gene panel indel variants in the VKGL [month] [year] public consensus release"
 //            if(!SAID.genes.contains(clv.gene)){
 //                continue;
 //            }
