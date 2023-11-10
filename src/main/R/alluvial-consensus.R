@@ -5,7 +5,7 @@ require(ggalluvial)
 require(RColorBrewer)
 require(plyr)
 
-setwd("/Users/joeri/VKGL/VKGL-releases")
+setwd("/Users/joeri/VKGL/VKGL-releases/oct2023")
 curRel <- "oct2023"
 curRelFull <- "October 2023"
 
@@ -13,12 +13,12 @@ vch <- read.table("dataframe.tsv",header=TRUE,sep='\t',quote="",comment.char="")
 vch$Release <- factor(vch$Release, levels = c("may2018", "oct2018", "june2019", "oct2019", "dec2019", "mar2020", "jun2020", "sep2020", "apr2021", "jun2021", "sep2021", "dec2021", "sep2022", "jan2023", "apr2023", "july2023", "oct2023"))
 vch$Release <- revalue(vch$Release, c("may2018"="May 2018", "oct2018"="Oct 2018", "june2019"="June 2019", "oct2019"="Oct 2019", "dec2019"="Dec 2019", "mar2020"="Mar 2020", "jun2020"="June 2020", "sep2020"="Sept 2020", "apr2021"="Apr 2021", "jun2021"="June 2021", "sep2021"="Sept 2021", "dec2021"="Dec 2021", "sep2022"="Sept 2022", "jan2023"="Jan 2023", "apr2023"="Apr 2023", "july2023"="July 2023", "oct2023"="Oct 2023"))
 vch$Consensus <- factor(vch$Consensus)
-vch$Consensus <- revalue(vch$Consensus, c("VUS"="VUS", "LB"="LB/B", "LP"="LP/P", "CF"="No consensus", "Absent"="Absent from release"))
+vch$Consensus <- revalue(vch$Consensus, c("VUS"="VUS", "LB"="LB/B", "LP"="LP/P", "CF"="Multiple classifications", "Absent"="Absent from release"))
 
 palette <- c( "VUS" = "#8DA0CB",
               "LB/B" =  "#A6D854",
               "LP/P" =  "#FC8D62",
-              "No consensus" =  "#FFD92F",
+              "Multiple classifications" =  "#FFD92F",
               "Absent from release" = "#B3B3B3")
 
 ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensus, label = Consensus)) +
@@ -72,13 +72,14 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
-#ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with conflicting classifications", sep=""))
-#ggsave(paste("vkgl-",curRel,"-conflicts.png", sep=""), width = 11, height = 8)
+#ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with multiple classifications", sep=""))
+#ggsave(paste("vkgl-",curRel,"-multiclass.png", sep=""), width = 11, height = 8)
 
 #ggtitle(paste("History of SAID gene panel indel variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,"-said-indels.png", sep=""), width = 11, height = 8)
 
 # Proportion of variants in a specific release
+rel <- subset(vch, Release == "May 2018")
 rel <- subset(vch, Release == "Oct 2023")
 table(rel$Consensus)
 
@@ -92,3 +93,15 @@ for(start in 1:(length(levels(vch$Release))-1))
   changes <- length(firstIDs) - sum(firstIDs == secondIDs)
   cat(paste("from",first,"to",second,"there are",changes,"changes\n",sep=" "))
 }
+
+# Variants NOT absent in release A but absent in release B
+a <- subset(vch, Release == "Oct 2019" & Consensus != "Absent from release")
+table(a$Consensus)
+b <- subset(vch, Release == "Dec 2019" & Consensus == "Absent from release")
+table(b$Consensus)
+sum(a$Id %in% b$Id)
+
+# Fisher test of overrepresented SLCO1B1 mutations
+dat <- data.frame("SLCO1B1" = c(244, 17), "OtherGenes" = c(203882-244, 99-17), row.names = c("Oct 2023 full data", "Oct 2023 LB/LP transitions"), stringsAsFactors = FALSE)
+t <- fisher.test(dat)
+t$p.value
