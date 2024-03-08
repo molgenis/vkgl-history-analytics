@@ -88,6 +88,10 @@ public class ConsensusLevelVKGLHistoryAnalytics {
 //            if(!clv.isInDel){
 //                continue;
 //            }
+            // For stats only on the current release after "merging on itself"
+//            if(!clv.release.equals(CURRENT_RELEASE)){
+//               continue;
+//            }
             /****/
 
             allReleases.add(clv.release);

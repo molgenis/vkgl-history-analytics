@@ -78,6 +78,43 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 #ggtitle(paste("History of SAID gene panel indel variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,"-said-indels.png", sep=""), width = 11, height = 8)
 
+
+#################
+# PAPER NUMBERS #
+#################
+
+# on 'unfiltered' data:
+total <- dim(vch)[1]
+total
+table(vch$Consensus)
+SLCO1B1_occ <- dim(subset(vch, Gene == "SLCO1B1"))[1]
+# on 'greater than 1 classification'
+dim(subset(vch, Release == "Feb 2024"))
+oct18lblp <- subset(vch, Release == "Oct 2018" & (Consensus == "LB/B" | Consensus == "LP/P"))
+dim(oct18lblp)
+jun19vus <- subset(vch, Release == "June 2019" & Consensus == "VUS")
+dim(jun19vus)
+oct18lblpToJun19vus <- intersect(oct18lblp$Id, jun19vus$Id)
+length(oct18lblpToJun19vus)
+oct19lblp <- subset(vch, Release == "Oct 2019" & (Consensus == "LB/B" | Consensus == "LP/P"))
+jun19vusToOct19lblp <- intersect(jun19vus$Id,oct19lblp$Id)
+length(jun19vusToOct19lblp)
+length(intersect(oct18lblpToJun19vus,jun19vusToOct19lblp))
+# on lp-lb or lb-lp transitions
+feb2024_total <- dim(subset(vch, Release == "Feb 2024"))[1]
+feb2024_total
+feb2024_SLCO1B1_occ <- dim(subset(feb2024, Gene == "SLCO1B1"))[1]
+feb2024_SLCO1B1_occ
+dat <- data.frame("SLCO1B1" = c(SLCO1B1_occ, feb2024_SLCO1B1_occ), "OtherGenes" = c(total-SLCO1B1_occ, feb2024_total-feb2024_SLCO1B1_occ), row.names = c("Feb 2024 full data", "Feb 2024 LB/LP transitions"), stringsAsFactors = FALSE)
+dat
+t <- fisher.test(dat)
+t$p.value
+
+
+##########
+# UNUSED #
+##########
+
 # Proportion of variants in a specific release
 rel <- subset(vch, Release == "May 2018")
 rel <- subset(vch, Release == "Oct 2023")
