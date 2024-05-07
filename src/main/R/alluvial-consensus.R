@@ -5,13 +5,13 @@ require(ggalluvial)
 require(RColorBrewer)
 require(plyr)
 
-setwd("/Users/joeri/VKGL/VKGL-releases/feb2024")
-curRel <- "feb2024"
-curRelFull <- "February 2024"
+setwd("/Users/joeri/VKGL/VKGL-releases/apr2024")
+curRel <- "apr2024"
+curRelFull <- "April 2024"
 
 vch <- read.table("dataframe.tsv",header=TRUE,sep='\t',quote="",comment.char="")
-vch$Release <- factor(vch$Release, levels = c("may2018", "oct2018", "june2019", "oct2019", "dec2019", "mar2020", "jun2020", "sep2020", "apr2021", "jun2021", "sep2021", "dec2021", "sep2022", "jan2023", "apr2023", "july2023", "oct2023", "feb2024"))
-vch$Release <- revalue(vch$Release, c("may2018"="May 2018", "oct2018"="Oct 2018", "june2019"="June 2019", "oct2019"="Oct 2019", "dec2019"="Dec 2019", "mar2020"="Mar 2020", "jun2020"="June 2020", "sep2020"="Sept 2020", "apr2021"="Apr 2021", "jun2021"="June 2021", "sep2021"="Sept 2021", "dec2021"="Dec 2021", "sep2022"="Sept 2022", "jan2023"="Jan 2023", "apr2023"="Apr 2023", "july2023"="July 2023", "oct2023"="Oct 2023", "feb2024"="Feb 2024"))
+vch$Release <- factor(vch$Release, levels = c("may2018", "oct2018", "june2019", "oct2019", "dec2019", "mar2020", "jun2020", "sep2020", "apr2021", "jun2021", "sep2021", "dec2021", "sep2022", "jan2023", "apr2023", "july2023", "oct2023", "feb2024", "apr2024"))
+vch$Release <- revalue(vch$Release, c("may2018"="May 2018", "oct2018"="Oct 2018", "june2019"="June 2019", "oct2019"="Oct 2019", "dec2019"="Dec 2019", "mar2020"="Mar 2020", "jun2020"="June 2020", "sep2020"="Sept 2020", "apr2021"="Apr 2021", "jun2021"="June 2021", "sep2021"="Sept 2021", "dec2021"="Dec 2021", "sep2022"="Sept 2022", "jan2023"="Jan 2023", "apr2023"="Apr 2023", "july2023"="July 2023", "oct2023"="Oct 2023", "feb2024"="Feb 2024", "apr2024"="Apr 2024"))
 vch$Consensus <- factor(vch$Consensus)
 vch$Consensus <- revalue(vch$Consensus, c("VUS"="VUS", "LB"="LB/B", "LP"="LP/P", "CF"="Multiple classifications", "Absent"="Absent from release"))
 
@@ -28,6 +28,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme_bw() +
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Release date of variant classification database", y = "Number of variants") +
 #ggtitle(paste("Classification history of all variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,".png", sep=""), width = 11, height = 6)
@@ -50,6 +51,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme_bw() +
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
 #ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with any lifetime LP-to-LB or LB-to-LP transition",sep=""))
 #ggsave(paste("vkgl-",curRel,"-lp-lb-trans.png",sep=""), width = 11, height = 6)
@@ -71,6 +73,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme_bw() +
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
 #ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with multiple classifications", sep=""))
 #ggsave(paste("vkgl-",curRel,"-multiclass.png", sep=""), width = 11, height = 8)
