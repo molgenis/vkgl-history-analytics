@@ -86,7 +86,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 # PAPER NUMBERS #
 #################
 
-# on 'unfiltered' data:
+# on latest 'unfiltered' data:
 total <- dim(vch)[1]
 total
 table(vch$Consensus)
@@ -104,11 +104,11 @@ jun19vusToOct19lblp <- intersect(jun19vus$Id,oct19lblp$Id)
 length(jun19vusToOct19lblp)
 length(intersect(oct18lblpToJun19vus,jun19vusToOct19lblp))
 # on lp-lb or lb-lp transitions
-feb2024_total <- dim(subset(vch, Release == "Feb 2024"))[1]
-feb2024_total
-feb2024_SLCO1B1_occ <- dim(subset(feb2024, Gene == "SLCO1B1"))[1]
-feb2024_SLCO1B1_occ
-dat <- data.frame("SLCO1B1" = c(SLCO1B1_occ, feb2024_SLCO1B1_occ), "OtherGenes" = c(total-SLCO1B1_occ, feb2024_total-feb2024_SLCO1B1_occ), row.names = c("Feb 2024 full data", "Feb 2024 LB/LP transitions"), stringsAsFactors = FALSE)
+latest_total <- dim(subset(vch, Release == "Apr 2024"))[1]
+latest_total
+latest_SLCO1B1_occ <- dim(subset(feb2024, Gene == "SLCO1B1"))[1]
+latest_SLCO1B1_occ
+dat <- data.frame("SLCO1B1" = c(SLCO1B1_occ, latest_SLCO1B1_occ), "OtherGenes" = c(total-SLCO1B1_occ, latest_total-latest_SLCO1B1_occ), row.names = c("Latest full data", "Latest data LB/LP transitions"), stringsAsFactors = FALSE)
 dat
 t <- fisher.test(dat)
 t$p.value
