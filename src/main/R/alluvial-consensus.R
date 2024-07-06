@@ -92,7 +92,7 @@ total
 table(vch$Consensus)
 SLCO1B1_occ <- dim(subset(vch, Gene == "SLCO1B1"))[1]
 # on 'greater than 1 classification'
-dim(subset(vch, Release == "Feb 2024"))
+dim(subset(vch, Release == "Apr 2024"))
 oct18lblp <- subset(vch, Release == "Oct 2018" & (Consensus == "LB/B" | Consensus == "LP/P"))
 dim(oct18lblp)
 jun19vus <- subset(vch, Release == "June 2019" & Consensus == "VUS")
@@ -104,9 +104,10 @@ jun19vusToOct19lblp <- intersect(jun19vus$Id,oct19lblp$Id)
 length(jun19vusToOct19lblp)
 length(intersect(oct18lblpToJun19vus,jun19vusToOct19lblp))
 # on lp-lb or lb-lp transitions
-latest_total <- dim(subset(vch, Release == "Apr 2024"))[1]
+latest_data <- subset(vch, Release == "Apr 2024")
+latest_total <- dim(latest_data)[1]
 latest_total
-latest_SLCO1B1_occ <- dim(subset(feb2024, Gene == "SLCO1B1"))[1]
+latest_SLCO1B1_occ <- dim(subset(latest_data, Gene == "SLCO1B1"))[1]
 latest_SLCO1B1_occ
 dat <- data.frame("SLCO1B1" = c(SLCO1B1_occ, latest_SLCO1B1_occ), "OtherGenes" = c(total-SLCO1B1_occ, latest_total-latest_SLCO1B1_occ), row.names = c("Latest full data", "Latest data LB/LP transitions"), stringsAsFactors = FALSE)
 dat
