@@ -5,13 +5,13 @@ require(ggalluvial)
 require(RColorBrewer)
 require(plyr)
 
-setwd("/Users/joeri/VKGL/VKGL-releases/july2024")
-curRel <- "july2024"
-curRelFull <- "July 2024"
+setwd("/Users/joeri/VKGL/VKGL-releases/oct2024")
+curRel <- "oct2024"
+curRelFull <- "Oct 2024"
 
 vch <- read.table("dataframe.tsv",header=TRUE,sep='\t',quote="",comment.char="")
-vch$Release <- factor(vch$Release, levels = c("may2018", "oct2018", "june2019", "oct2019", "dec2019", "mar2020", "jun2020", "sep2020", "apr2021", "jun2021", "sep2021", "dec2021", "sep2022", "jan2023", "apr2023", "july2023", "oct2023", "feb2024", "apr2024", "july2024"))
-vch$Release <- revalue(vch$Release, c("may2018"="May 2018", "oct2018"="Oct 2018", "june2019"="June 2019", "oct2019"="Oct 2019", "dec2019"="Dec 2019", "mar2020"="Mar 2020", "jun2020"="June 2020", "sep2020"="Sept 2020", "apr2021"="Apr 2021", "jun2021"="June 2021", "sep2021"="Sept 2021", "dec2021"="Dec 2021", "sep2022"="Sept 2022", "jan2023"="Jan 2023", "apr2023"="Apr 2023", "july2023"="July 2023", "oct2023"="Oct 2023", "feb2024"="Feb 2024", "apr2024"="Apr 2024", "july2024"="July 2024"))
+vch$Release <- factor(vch$Release, levels = c("may2018", "oct2018", "june2019", "oct2019", "dec2019", "mar2020", "jun2020", "sep2020", "apr2021", "jun2021", "sep2021", "dec2021", "sep2022", "jan2023", "apr2023", "july2023", "oct2023", "feb2024", "apr2024", "july2024", "oct2024"))
+vch$Release <- revalue(vch$Release, c("may2018"="May 2018", "oct2018"="Oct 2018", "june2019"="June 2019", "oct2019"="Oct 2019", "dec2019"="Dec 2019", "mar2020"="Mar 2020", "jun2020"="June 2020", "sep2020"="Sept 2020", "apr2021"="Apr 2021", "jun2021"="June 2021", "sep2021"="Sept 2021", "dec2021"="Dec 2021", "sep2022"="Sept 2022", "jan2023"="Jan 2023", "apr2023"="Apr 2023", "july2023"="July 2023", "oct2023"="Oct 2023", "feb2024"="Feb 2024", "apr2024"="Apr 2024", "july2024"="July 2024", "oct2024"="Oct 2024"))
 vch$Consensus <- factor(vch$Consensus)
 vch$Consensus <- revalue(vch$Consensus, c("VUS"="VUS", "LB"="LB/B", "LP"="LP/P", "CF"="Multiple classifications", "Absent"="Absent from release"))
 
