@@ -225,6 +225,11 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                        // && differentialClassifications.contains("LB")
                        // && differentialClassifications.contains("LP")
 
+                       // History of benign variants in the VKGL [month] [year] public consensus release that were considered pathogenic at some point
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
+                       // && differentialClassifications.contains("LP")
+                       // && clv.releaseClassification.get(CURRENT_RELEASE).equals("LB")
+
                        // "History of variants that have appeared in the VKGL public consensus that are not part of the [month] [year] release"
                        // && !clv.releaseClassification.containsKey(CURRENT_RELEASE)
 

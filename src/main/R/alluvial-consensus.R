@@ -61,6 +61,9 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 
 #ggtitle(paste("History of BRCA1 insertion variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,"-brca1-ins.png",sep=""), width = 11, height = 6)
+  
+ggtitle(paste("History of benign variants in the VKGL ",curRelFull," public consensus release that were considered pathogenic at some point",sep=""))
+ggsave(paste("vkgl-",curRel,"-lb-now-lp-earlier.png",sep=""), width = 11, height = 7)
 
 ---
 
